@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    #运行的环境
+    active: dev
+oss:
+  type: ${oss.type}
+  endpoint: ${oss.endpoint}
+  accessKeyId: ${oss.accessKeyId}
+  accessKeySecret: ${oss.accessKeySecret}
