@@ -11,3 +11,4 @@ oss:
   endpoint: ${oss.endpoint}
   accessKeyId: ${oss.accessKeyId}
   accessKeySecret: ${oss.accessKeySecret}
+  region: ${oss.region}
