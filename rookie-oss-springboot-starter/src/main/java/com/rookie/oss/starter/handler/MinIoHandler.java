@@ -2,15 +2,11 @@ package com.rookie.oss.starter.handler;
 
 import cn.hutool.core.lang.UUID;
 import com.rookie.oss.starter.core.AbstractOssCore;
-import io.minio.MinioClient;
-import io.minio.ObjectWriteResponse;
-import io.minio.PutObjectArgs;
-import io.minio.errors.*;
+import io.minio.*;
+import io.minio.http.Method;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import java.io.InputStream;
 
 /**
  * @author eumenides
@@ -31,7 +27,7 @@ public class MinIoHandler extends AbstractOssCore {
         String filename = UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
 
         try {
-            ObjectWriteResponse objectWriteResponse = minioClient.putObject(PutObjectArgs.builder()
+            minioClient.putObject(PutObjectArgs.builder()
                     .bucket(bucket)
                     .object(filename)
                     .stream(file.getInputStream(), file.getSize(), -1)
@@ -41,6 +37,23 @@ public class MinIoHandler extends AbstractOssCore {
             throw new RuntimeException(e);
         }
 
-        return "Hello World";
+        return filename;
+    }
+
+    @Override
+    public String getFileTmpPath(String fileName,String bucket) throws Exception {
+        return minioClient.getPresignedObjectUrl(
+                GetPresignedObjectUrlArgs.builder()
+                        .method(Method.GET)
+                        .bucket(bucket)
+                        .object(fileName)
+                        .expiry(60 * 60 * 24)
+                        .build());
+    }
+
+    @Override
+    public InputStream downloadFile(String fileName, String bucketName) throws Exception{
+        return minioClient.getObject(
+                GetObjectArgs.builder().bucket(bucketName).object(fileName).build());
     }
 }

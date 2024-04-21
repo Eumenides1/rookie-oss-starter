@@ -2,6 +2,10 @@ spring:
   profiles:
     #运行的环境
     active: dev
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
 oss:
   type: ${oss.type}
   endpoint: ${oss.endpoint}
