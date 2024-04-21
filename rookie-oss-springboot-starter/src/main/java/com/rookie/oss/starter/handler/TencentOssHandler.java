@@ -3,6 +3,7 @@ package com.rookie.oss.starter.handler;
 import cn.hutool.core.lang.UUID;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.http.HttpMethodName;
+import com.qcloud.cos.model.Bucket;
 import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.model.PutObjectResult;
 import com.rookie.oss.starter.core.AbstractOssCore;
@@ -14,6 +15,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author eumenides
@@ -64,5 +66,10 @@ public class TencentOssHandler extends AbstractOssCore {
     @Override
     public InputStream downloadFile(String fileName, String bucketName) throws Exception {
         return null;
+    }
+
+    @Override
+    public List<Bucket> listBuckets() {
+        return cosClient.listBuckets();
     }
 }

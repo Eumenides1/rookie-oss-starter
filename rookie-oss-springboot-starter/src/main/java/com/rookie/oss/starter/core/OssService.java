@@ -1,16 +1,20 @@
 package com.rookie.oss.starter.core;
 
+import io.minio.errors.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  * @author eumenides
  * @description 文件上传核心接口
  * @date 2024/4/20
  */
-public interface OssService {
+public interface OssService<T> {
 
     /**
      * 上传文件,并返回生成的文件名
@@ -36,5 +40,7 @@ public interface OssService {
      */
     InputStream downloadFile(String fileName, String bucketName) throws Exception;
 
+
+    List<T>  listBuckets() throws Exception;
 
 }

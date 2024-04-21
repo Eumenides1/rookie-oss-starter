@@ -3,10 +3,16 @@ package com.rookie.oss.starter.handler;
 import cn.hutool.core.lang.UUID;
 import com.rookie.oss.starter.core.AbstractOssCore;
 import io.minio.*;
+import io.minio.errors.*;
 import io.minio.http.Method;
+import io.minio.messages.Bucket;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  * @author eumenides
@@ -55,5 +61,10 @@ public class MinIoHandler extends AbstractOssCore {
     public InputStream downloadFile(String fileName, String bucketName) throws Exception{
         return minioClient.getObject(
                 GetObjectArgs.builder().bucket(bucketName).object(fileName).build());
+    }
+
+    @Override
+    public List<Bucket> listBuckets() throws Exception {
+        return minioClient.listBuckets();
     }
 }

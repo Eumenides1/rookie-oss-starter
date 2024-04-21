@@ -1,5 +1,6 @@
 package com.rookie.oss.test;
 
+import com.qcloud.cos.model.Bucket;
 import com.rookie.oss.starter.core.AbstractOssCore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * @author eumenides
@@ -43,6 +45,10 @@ public class Test {
                 .headers(headers)
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
+    }
+    @GetMapping("listBuckets")
+    public List<Bucket> bucketList() throws Exception {
+        return core.listBuckets();
     }
 
 }
