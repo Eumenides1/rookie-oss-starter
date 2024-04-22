@@ -6,6 +6,7 @@ import com.qcloud.cos.http.HttpMethodName;
 import com.qcloud.cos.model.Bucket;
 import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.model.PutObjectResult;
+import com.rookie.oss.starter.common.domain.req.ApiResult;
 import com.rookie.oss.starter.core.AbstractOssCore;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,7 +32,7 @@ public class TencentOssHandler extends AbstractOssCore {
     }
 
     @Override
-    public String uploadFile(MultipartFile file, String bucket) throws IOException {
+    public ApiResult<String> uploadFile(MultipartFile file, String bucket) throws IOException {
 
         // 生成随机文件名
         String filename = UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
@@ -46,11 +47,11 @@ public class TencentOssHandler extends AbstractOssCore {
         // 使用完临时文件后确保它被删除
         tempFile.deleteOnExit();
 
-        return filename;
+        return ApiResult.success(filename);
     }
 
     @Override
-    public String getFileTmpPath(String fileName, String bucketName) throws Exception {
+    public ApiResult<String> getFileTmpPath(String fileName, String bucketName) throws Exception {
         // 设置签名过期时间(可选), 若未进行设置则默认使用 ClientConfig 中的签名过期时间(1小时)
         // 这里设置签名在半个小时后过期
         Date expirationDate = new Date(System.currentTimeMillis() + 30 * 60 * 1000);
@@ -60,7 +61,7 @@ public class TencentOssHandler extends AbstractOssCore {
 
         URL url = cosClient.generatePresignedUrl(bucketName, fileName, expirationDate, method);
 
-        return url.toString();
+        return ApiResult.success(url.toString());
     }
 
     @Override
@@ -69,7 +70,7 @@ public class TencentOssHandler extends AbstractOssCore {
     }
 
     @Override
-    public List<Bucket> listBuckets() {
-        return cosClient.listBuckets();
+    public ApiResult<List<Bucket>> listBuckets() {
+        return ApiResult.success(cosClient.listBuckets());
     }
 }

@@ -1,5 +1,6 @@
 package com.rookie.oss.starter.core;
 
+import com.rookie.oss.starter.common.domain.req.ApiResult;
 import io.minio.errors.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,14 +24,14 @@ public interface OssService<T> {
      * @return
      * @throws IOException
      */
-    String uploadFile(MultipartFile file,String bucket) throws IOException;
+    ApiResult<String> uploadFile(MultipartFile file, String bucket) throws IOException;
 
     /**
      * 返回临时带签名、过期时间一天、GET请求方式的访问URL
      * @param fileName
      * @return
      */
-    String getFileTmpPath(String fileName,String bucketName) throws Exception;
+    ApiResult<String> getFileTmpPath(String fileName,String bucketName) throws Exception;
 
     /**
      * 通过文件名下载文件
@@ -41,6 +42,6 @@ public interface OssService<T> {
     InputStream downloadFile(String fileName, String bucketName) throws Exception;
 
 
-    List<T>  listBuckets() throws Exception;
+    ApiResult<List<T>>  listBuckets() throws Exception;
 
 }

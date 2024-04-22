@@ -1,6 +1,7 @@
 package com.rookie.oss.test;
 
 import com.qcloud.cos.model.Bucket;
+import com.rookie.oss.starter.common.domain.req.ApiResult;
 import com.rookie.oss.starter.core.AbstractOssCore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -26,8 +27,11 @@ public class Test {
 
     @PostMapping("/upload")
     public String test(@RequestParam("file") MultipartFile file, @RequestParam("bucketName")String bucketName) throws Exception {
-        String fileName = core.uploadFile(file, bucketName);
-        return core.getFileTmpPath(fileName, bucketName);
+        ApiResult<String> result = core.uploadFile(file, bucketName);
+        if (result.getSuccess()) {
+            return core.getFileTmpPath(result.getData(), bucketName).getData();
+        }
+        return null;
     }
 
     @GetMapping("/download")
@@ -48,7 +52,7 @@ public class Test {
     }
     @GetMapping("listBuckets")
     public List<Bucket> bucketList() throws Exception {
-        return core.listBuckets();
+        return (List<Bucket>) core.listBuckets().getData();
     }
 
 }

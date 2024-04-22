@@ -1,17 +1,14 @@
 package com.rookie.oss.starter.handler;
 
 import cn.hutool.core.lang.UUID;
+import com.rookie.oss.starter.common.domain.req.ApiResult;
 import com.rookie.oss.starter.core.AbstractOssCore;
 import io.minio.*;
-import io.minio.errors.*;
 import io.minio.http.Method;
 import io.minio.messages.Bucket;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**
@@ -27,7 +24,7 @@ public class MinIoHandler extends AbstractOssCore {
     }
 
     @Override
-    public String uploadFile(MultipartFile file,String bucket) {
+    public ApiResult<String> uploadFile(MultipartFile file, String bucket) {
 
         // 生成随机文件名
         String filename = UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
@@ -43,18 +40,19 @@ public class MinIoHandler extends AbstractOssCore {
             throw new RuntimeException(e);
         }
 
-        return filename;
+        return ApiResult.success(filename);
     }
 
     @Override
-    public String getFileTmpPath(String fileName,String bucket) throws Exception {
-        return minioClient.getPresignedObjectUrl(
+    public ApiResult<String> getFileTmpPath(String fileName, String bucket) throws Exception {
+        String presignedObjectUrl = minioClient.getPresignedObjectUrl(
                 GetPresignedObjectUrlArgs.builder()
                         .method(Method.GET)
                         .bucket(bucket)
                         .object(fileName)
                         .expiry(60 * 60 * 24)
                         .build());
+        return ApiResult.success(presignedObjectUrl);
     }
 
     @Override
@@ -64,7 +62,7 @@ public class MinIoHandler extends AbstractOssCore {
     }
 
     @Override
-    public List<Bucket> listBuckets() throws Exception {
-        return minioClient.listBuckets();
+    public ApiResult<List<Bucket>> listBuckets() throws Exception {
+        return ApiResult.success(minioClient.listBuckets());
     }
 }

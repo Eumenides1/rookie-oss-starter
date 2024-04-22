@@ -1,5 +1,6 @@
 package com.rookie.oss.starter.core;
 
+import com.rookie.oss.starter.common.domain.req.ApiResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -19,10 +20,10 @@ public abstract class AbstractOssCore implements OssService{
     }
 
     @Override
-    public abstract String uploadFile(MultipartFile file,String bucket) throws IOException;
+    public abstract ApiResult<String> uploadFile(MultipartFile file, String bucket) throws IOException;
 
     @Override
-    public abstract String getFileTmpPath(String fileName,String bucketName) throws Exception;
+    public abstract ApiResult<String> getFileTmpPath(String fileName,String bucketName) throws Exception;
 
     @Override
     public abstract InputStream downloadFile(String fileName, String bucketName) throws Exception;
